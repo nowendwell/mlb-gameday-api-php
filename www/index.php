@@ -23,9 +23,9 @@ if (url_exists($url)){$plays = file_get_contents($url);}
 <title><?=$team?> Scoreboard - <?php echo ($_GET["date"])?date("l, F jS, Y",strtotime($_GET["date"])):$month."/".$day."/".$year; ?></title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
 <script type="text/javascript" src="sort.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -88,9 +88,11 @@ $(document).ready(function(){
 	}
 });
 </script>
-<link href="style.css" rel="stylesheet" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" >
+<link rel="stylesheet" href="style.css"/>
 </head>
-<body class="well" data-spy="scroll" data-target="#nav" data-offset="0">
+<body class="well <?=$json['data']['game']['status']?>" data-spy="scroll" data-target="#nav" data-offset="0">
 
 <!-- Navigation Box Begin -->
 <ul class="nav nav-list affix visible-desktop" id="nav">
@@ -165,7 +167,7 @@ $(document).ready(function(){
 	<table>
 		<tr>
 			<td>Away</td>
-			<td class="hidden-phone" rowspan="2" id="away_score"><?=$json['data']['game']['away_team_runs']?></td>
+			<td class="" rowspan="2" id="away_score"><?=$json['data']['game']['away_team_runs']?></td>
 		</tr>
 		<tr>
 			<td>
@@ -181,7 +183,7 @@ $(document).ready(function(){
 <div class="pull-right">
 	<table>
 		<tr>
-			<td rowspan="2" id="home_score" class="hidden-phone"><?=$json['data']['game']['home_team_runs']?></td>
+			<td rowspan="2" id="home_score" class=""><?=$json['data']['game']['home_team_runs']?></td>
 			<td>Home</td>
 			
 		</tr>
@@ -200,36 +202,20 @@ $(document).ready(function(){
 	<span style="font-size:24px;"><?=$json['data']['game']['away_team_name'];?> vs <?=$json['data']['game']['home_team_name'];?></span><br />
 	<span alt="PST" title="PST"><?=date("g:i A",strtotime($json['data']['game']['time']." ".$json['data']['game']['ampm']))?><sup>EST</sup></span>
 		@ <?=$json['data']['game']['venue']?><br />
-	<table align="center" cellpadding="5" class="hidden-phone">
+	<table align="center" cellpadding="5" class="">
 		<tr>
 			<td>
 				<table align="center" id="boxscore" cellpadding="5">
 					<thead>
 						<tr>
 							<th></th>
-							<th>1</th>
-							<th>2</th>
-							<th>3</th>
-							<th>4</th>
-							<th>5</th>
-							<th>6</th>
-							<th>7</th>
-							<th>8</th>
-							<th>9</th>
-							<?=(isset($json['data']['game']['linescore'][9]['away_inning_runs']))?"<th>10</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][10]['away_inning_runs']))?"<th>11</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][11]['away_inning_runs']))?"<th>12</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][12]['away_inning_runs']))?"<th>13</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][13]['away_inning_runs']))?"<th>14</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][14]['away_inning_runs']))?"<th>15</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][15]['away_inning_runs']))?"<th>16</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][16]['away_inning_runs']))?"<th>17</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][17]['away_inning_runs']))?"<th>18</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][18]['away_inning_runs']))?"<th>19</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][19]['away_inning_runs']))?"<th>20</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][20]['away_inning_runs']))?"<th>21</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][21]['away_inning_runs']))?"<th>22</th>":""?>
-							<?=(isset($json['data']['game']['linescore'][22]['away_inning_runs']))?"<th>23</th>":""?>
+							<?php
+							$i = 0;
+							while($json['data']['game']['linescore'][$i]['away_inning_runs'] != ""){
+								echo "<th>".($i + 1)."</th>";
+								$i++;
+							}
+							?>
 							<th>R</th>
 							<th>H</th>
 							<th>E</th>
@@ -238,59 +224,22 @@ $(document).ready(function(){
 					<tbody>
 						<tr>
 							<th><?=$json['data']['game']['away_name_abbrev'];?></th>
-							<td id="away_inning_1"><?=$json['data']['game']['linescore'][0]['away_inning_runs']?></td>
-							<td id="away_inning_2"><?=$json['data']['game']['linescore'][1]['away_inning_runs']?></td>
-							<td id="away_inning_3"><?=$json['data']['game']['linescore'][2]['away_inning_runs']?></td>
-							<td id="away_inning_4"><?=$json['data']['game']['linescore'][3]['away_inning_runs']?></td>
-							<td id="away_inning_5"><?=$json['data']['game']['linescore'][4]['away_inning_runs']?></td>
-							<td id="away_inning_6"><?=$json['data']['game']['linescore'][5]['away_inning_runs']?></td>
-							<td id="away_inning_7"><?=$json['data']['game']['linescore'][6]['away_inning_runs']?></td>
-							<td id="away_inning_8"><?=$json['data']['game']['linescore'][7]['away_inning_runs']?></td>
-							<td id="away_inning_9"><?=$json['data']['game']['linescore'][8]['away_inning_runs']?></td>
-							<?=(isset($json['data']['game']['linescore'][9]['away_inning_runs']))?'<td id="away_inning_10">'.$json['data']['game']['linescore'][9]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][10]['away_inning_runs']))?'<td id="away_inning_11">'.$json['data']['game']['linescore'][10]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][11]['away_inning_runs']))?'<td id="away_inning_12">'.$json['data']['game']['linescore'][11]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][12]['away_inning_runs']))?'<td id="away_inning_13">'.$json['data']['game']['linescore'][12]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][13]['away_inning_runs']))?'<td id="away_inning_14">'.$json['data']['game']['linescore'][13]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][14]['away_inning_runs']))?'<td id="away_inning_15">'.$json['data']['game']['linescore'][14]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][15]['away_inning_runs']))?'<td id="away_inning_16">'.$json['data']['game']['linescore'][15]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][16]['away_inning_runs']))?'<td id="away_inning_17">'.$json['data']['game']['linescore'][16]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][17]['away_inning_runs']))?'<td id="away_inning_18">'.$json['data']['game']['linescore'][17]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][18]['away_inning_runs']))?'<td id="away_inning_19">'.$json['data']['game']['linescore'][18]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][19]['away_inning_runs']))?'<td id="away_inning_20">'.$json['data']['game']['linescore'][19]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][20]['away_inning_runs']))?'<td id="away_inning_21">'.$json['data']['game']['linescore'][20]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][21]['away_inning_runs']))?'<td id="away_inning_22">'.$json['data']['game']['linescore'][21]['away_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][22]['away_inning_runs']))?'<td id="away_inning_23">'.$json['data']['game']['linescore'][22]['away_inning_runs'].'</td>':""?>
-						
+							<?php
+							foreach($json['data']['game']['linescore'] as $score){
+								echo '<td>'.$score['away_inning_runs'].'</td>';
+							}
+							?>						
 							<td id="away_runs"><?=$json['data']['game']['away_team_runs']?></td>
 							<td id="away_hits"><?=$json['data']['game']['away_team_hits']?></td>
 							<td id="away_errors"><?=$json['data']['game']['away_team_errors']?></td>
 						</tr>
 						<tr>
 							<th><?=$json['data']['game']['home_name_abbrev'];?></th>
-							<td id="home_inning_1"><?=$json['data']['game']['linescore'][0]['home_inning_runs']?></td>
-							<td id="home_inning_2"><?=$json['data']['game']['linescore'][1]['home_inning_runs']?></td>
-							<td id="home_inning_3"><?=$json['data']['game']['linescore'][2]['home_inning_runs']?></td>
-							<td id="home_inning_4"><?=$json['data']['game']['linescore'][3]['home_inning_runs']?></td>
-							<td id="home_inning_5"><?=$json['data']['game']['linescore'][4]['home_inning_runs']?></td>
-							<td id="home_inning_6"><?=$json['data']['game']['linescore'][5]['home_inning_runs']?></td>
-							<td id="home_inning_7"><?=$json['data']['game']['linescore'][6]['home_inning_runs']?></td>
-							<td id="home_inning_8"><?=$json['data']['game']['linescore'][7]['home_inning_runs']?></td>
-							<td id="home_inning_9"><?=$json['data']['game']['linescore'][8]['home_inning_runs']?></td>
-							<?=(isset($json['data']['game']['linescore'][9]['home_inning_runs']))?'<td id="home_inning_10">'.$json['data']['game']['linescore'][9]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][10]['home_inning_runs']))?'<td id="home_inning_11">'.$json['data']['game']['linescore'][10]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][11]['home_inning_runs']))?'<td id="home_inning_12">'.$json['data']['game']['linescore'][11]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][12]['home_inning_runs']))?'<td id="home_inning_13">'.$json['data']['game']['linescore'][12]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][13]['home_inning_runs']))?'<td id="home_inning_14">'.$json['data']['game']['linescore'][13]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][14]['home_inning_runs']))?'<td id="home_inning_15">'.$json['data']['game']['linescore'][14]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][15]['home_inning_runs']))?'<td id="home_inning_16">'.$json['data']['game']['linescore'][15]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][16]['home_inning_runs']))?'<td id="home_inning_17">'.$json['data']['game']['linescore'][16]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][17]['home_inning_runs']))?'<td id="home_inning_18">'.$json['data']['game']['linescore'][17]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][18]['home_inning_runs']))?'<td id="home_inning_19">'.$json['data']['game']['linescore'][18]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][19]['home_inning_runs']))?'<td id="home_inning_20">'.$json['data']['game']['linescore'][19]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][20]['home_inning_runs']))?'<td id="home_inning_21">'.$json['data']['game']['linescore'][20]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][21]['home_inning_runs']))?'<td id="home_inning_22">'.$json['data']['game']['linescore'][21]['home_inning_runs'].'</td>':""?>
-							<?=(isset($json['data']['game']['linescore'][22]['home_inning_runs']))?'<td id="home_inning_23">'.$json['data']['game']['linescore'][22]['home_inning_runs'].'</td>':""?>
+							<?php
+							foreach($json['data']['game']['linescore'] as $score){
+								echo '<td>'.$score['home_inning_runs'].'</td>';
+							}
+							?>	
 							<td id="home_runs"><?=$json['data']['game']['home_team_runs']?></td>
 							<td id="home_hits"><?=$json['data']['game']['home_team_hits']?></td>
 							<td id="home_errors"><?=$json['data']['game']['home_team_errors']?></td>
@@ -474,7 +423,7 @@ $(document).ready(function(){
 		<table align="center">
 			<tr>
 				<td style="width:100%;"><img class="thumbnail" style="margin:0 auto" src="http://mlb.mlb.com<?=$extra['photos']['ipad']['url']?>" alt="<?=$extra['photos']['ipad']['caption']?>"/></td></tr><tr>
-				<td><h2 class="span4"><?=$extra['wrap']['mlb']['headline']?></h2><p align="left" style="vertical-align:middle"><?=$extra['wrap']['mlb']['blurb']?></p></td>
+				<td><h2 class=""><?=$extra['wrap']['mlb']['headline']?></h2><p align="left" style="vertical-align:middle; padding:10px;"><?=$extra['wrap']['mlb']['blurb']?></p></td>
 			</tr>
 		</table>
 		<?php

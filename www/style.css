@@ -3,7 +3,7 @@ ul#scoreboard{width:100%;
 }
 ul#scoreboard li{float:left;list-style-type:none;width:60px;}
 table:not(#pitchers){text-align:center;}
-#home_score, #away_score{font-size:72px;font-weight:bold;padding:10px;}
+#home_score, #away_score{font-size:1em;font-weight:bold;padding:10px;}
 #boxscore tbody th, #boxscore tbody td{outline:1px solid #ccc}
 #pitchers {margin-top:25px;text-align:left !important;}
 #pitchers {width:100%;}
@@ -32,3 +32,9 @@ div.bases div.on_base{ background-position: -31px 0; width: 26px; height: 26px; 
 #nav li:last-of-type, #nav li:last-of-type a {border-radius:0 0 6px 6px;}
 #nav li:not(.active) a:hover {background-color:#F5F5F5;}
 #nav li a {border: 1px solid #E5E5E5;display: block;margin: 0 0 -1px;padding: 8px 14px;}
+
+body.Preview #boxscore{display:none;}
+
+@media screen and (min-width:768px){
+	#home_score, #away_score{font-size:5em;font-weight:bold;padding:10px;}
+}
